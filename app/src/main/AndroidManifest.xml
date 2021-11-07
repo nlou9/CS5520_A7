@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS5520_A7">
         <activity
+            android:name=".user.login"
+            android:exported="true" />
+        <activity
+            android:name=".notification.SendNotificationActivity"
+            android:exported="true" />
+        <activity
+            android:name=".stickerService.SendStickerActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
