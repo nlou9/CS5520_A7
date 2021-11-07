@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1047812158947",
+    "project_id": "cs5520a7-301d3",
+    "storage_bucket": "cs5520a7-301d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1047812158947:android:82d5d9aad1c78ca5999cd6",
+        "android_client_info": {
+          "package_name": "edu.neu.madcourse.cs5520_a7"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1047812158947-6u73kp5adh3e48brhivu9ve8vs12dccj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnIGrgrapAj0OWVyUES2z9IIspIGEhzCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1047812158947-6u73kp5adh3e48brhivu9ve8vs12dccj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
