@@ -6,8 +6,8 @@ public class Event {
     public String stickerId;
     public String sender;
     public String receiver;
-    public String timestamp;
-    public Boolean status;
+    public long timestampInMillis;
+    public Boolean notifyStatus;
 
 
     public Event() {
@@ -15,13 +15,13 @@ public class Event {
     }
 
 
-    public Event(String eventId, String stickerId, String sender, String receiver, String timestamp, Boolean status) {
+    public Event(String eventId, String stickerId, String sender, String receiver, long timestampInMillis, Boolean notifyStatus) {
         this.eventId = eventId;
         this.stickerId = stickerId;
         this.sender = sender;
         this.receiver = receiver;
-        this.timestamp = timestamp;
-        this.status = status;
+        this.timestampInMillis = timestampInMillis;
+        this.notifyStatus = notifyStatus;
     }
 }
 
