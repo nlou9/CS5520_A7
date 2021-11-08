@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
 
   }
 
-  private void login(String username) {
+  private void register(String username) {
     User user = new User(username, deviceFcmToken);
     Task<Void> loginTask = mDatabase.child(USER_TABLE).child(user.username).setValue(user);
     loginTask.addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -72,7 +72,9 @@ public class LoginActivity extends AppCompatActivity {
     Toast.makeText(LoginActivity.this, "Login successfully!", Toast.LENGTH_SHORT).show();
   }
 
-  public void loginAndGoBackToMain(View view) {
+  public void registerAndGoBackToMain(View view) {
+    EditText inputUserName = findViewById(R.id.inputUserName);
+    register(inputUserName.getText().toString());
     this.finish();
   }
 }
