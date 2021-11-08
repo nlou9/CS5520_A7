@@ -50,7 +50,12 @@ public class LoginActivity extends AppCompatActivity {
     EditText etName = findViewById(R.id.et);
     Button btnRegister = findViewById(R.id.btnRegister);
     btnRegister.setOnClickListener(view -> {
-      login(etName.getText().toString());
+      String name = etName.getText().toString();
+      if (name.isEmpty()) {
+        Toast.makeText(LoginActivity.this, "Please enter a name!", Toast.LENGTH_SHORT).show();
+      } else {
+        login(name);
+      }
     });
 
   }
