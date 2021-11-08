@@ -15,9 +15,9 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import edu.neu.madcourse.cs5520_a7.R;
 import edu.neu.madcourse.cs5520_a7.stickerService.models.User;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
-  private static final String TAG = Login.class.getSimpleName();
+  private static final String TAG = LoginActivity.class.getSimpleName();
   private static final String USER_TABLE = "Users";
   private String deviceFcmToken = "";
   private DatabaseReference mDatabase;
