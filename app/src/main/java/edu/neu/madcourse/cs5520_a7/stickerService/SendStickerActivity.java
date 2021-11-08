@@ -71,7 +71,8 @@ public class SendStickerActivity extends AppCompatActivity {
           Event event = new Event(eventId, stickerId, senderUserName, receiverUserName,
             Instant.now().toEpochMilli(), false);
           mDatabase.child(EVENT_TABLE).child(eventId).setValue(event);
-          sendMessageToDevice(senderUserName, stickerId, eventId, receiver.fcmToken);
+          sendMessageToDevice(senderUserName, stickerId, eventId, receiverUserName,
+            receiver.fcmToken);
         }
 
         @Override
@@ -87,7 +88,7 @@ public class SendStickerActivity extends AppCompatActivity {
    * because that's what the instanceID token is defined to be.
    */
   private void sendMessageToDevice(
-    String sender, String stickerId, String eventId, String targetToken) {
+    String sender, String stickerId, String eventId, String receiver, String targetToken) {
     // Prepare data
     JSONObject jPayload = new JSONObject();
     JSONObject jdata = new JSONObject();
@@ -96,6 +97,7 @@ public class SendStickerActivity extends AppCompatActivity {
       jdata.put("title", String.format("%s sends you a new message", sender));
       jdata.put("stickerId", stickerId);
       jdata.put("eventId", eventId);
+      jdata.put("receiver", receiver);
 
       // If sending to a single client
       jPayload.put("to", targetToken);

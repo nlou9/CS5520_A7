@@ -5,10 +5,13 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,11 +21,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.Map;
+import java.util.Random;
 
+import edu.neu.madcourse.cs5520_a7.stickerService.ReceiveHistoryActivity;
 import edu.neu.madcourse.cs5520_a7.stickerService.models.Event;
-import edu.neu.madcourse.cs5520_a7.stickerService.models.User;
-import edu.neu.madcourse.cs5520_a7.utils.Utils;
 
 public class StickerFirebaseMessagingService extends FirebaseMessagingService {
   private static final String TAG = StickerFirebaseMessagingService.class.getSimpleName();
@@ -71,8 +73,10 @@ public class StickerFirebaseMessagingService extends FirebaseMessagingService {
   private void myClassifier(RemoteMessage remoteMessage) {
 
     if (remoteMessage.getData().size() > 0) {
-      // TODO: show notification on UI
       String stickerId = remoteMessage.getData().get("stickerId");
+      String title = remoteMessage.getData().get("title");
+      String receiver = remoteMessage.getData().get("receiver");
+      showNotification(title, stickerId, receiver);
       String eventId = remoteMessage.getData().get("eventId");
       if (eventId != null) {
         // Update the notifyStatus as true when receiving the event.
@@ -93,88 +97,47 @@ public class StickerFirebaseMessagingService extends FirebaseMessagingService {
           }
         });
       }
-      Utils.postToastMessage(remoteMessage.getData().get("title"), getApplicationContext());
     }
   }
 
+  /**
+   * Create and show a simple notification containing the received FCM message.
+   */
+  private void showNotification(String title, String stickerId, String receiver) {
 
-//  /**
-//   * Create and show a simple notification containing the received FCM message.
-//   *
-//   * @param remoteMessage FCM message  received.
-//   */
-//  @Deprecated
-//  private void showNotification(RemoteMessage remoteMessage) {
-//
-//    Intent intent = new Intent(this, MainActivity.class);
-//    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//
-//    PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-//      PendingIntent.FLAG_ONE_SHOT);
-//
-//    Notification notification;
-//    NotificationCompat.Builder builder;
-//    NotificationManager notificationManager = getSystemService(NotificationManager.class);
-//
-//    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-//      NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
-//      // Configure the notification channel
-//      notificationChannel.setDescription(CHANNEL_DESCRIPTION);
-//      notificationManager.createNotificationChannel(notificationChannel);
-//      builder = new NotificationCompat.Builder(this, CHANNEL_ID);
-//
-//    } else {
-//      builder = new NotificationCompat.Builder(this);
-//    }
-//
-//
-//    notification = builder.setContentTitle(remoteMessage.getNotification().getTitle())
-//      .setContentText(remoteMessage.getNotification().getBody())
-//      .setSmallIcon(R.mipmap.ic_launcher)
-//      .setAutoCancel(true)
-//      .setContentIntent(pendingIntent)
-//      .build();
-//    notificationManager.notify(0, notification);
-//
-//  }
-//
-//  /**
-//   * Create and show a simple notification containing the received FCM message.
-//   *
-//   * @param remoteMessageNotification FCM message  received.
-//   */
-//  private void showNotification(RemoteMessage.Notification remoteMessageNotification) {
-//
-//    Intent intent = new Intent(this, MainActivity.class);
-//    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//
-//    PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-//      PendingIntent.FLAG_ONE_SHOT);
-//
-//    Notification notification;
-//    NotificationCompat.Builder builder;
-//    NotificationManager notificationManager = getSystemService(NotificationManager.class);
-//
-//    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-//      NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
-//      // Configure the notification channel
-//      notificationChannel.setDescription(CHANNEL_DESCRIPTION);
-//      notificationManager.createNotificationChannel(notificationChannel);
-//      builder = new NotificationCompat.Builder(this, CHANNEL_ID);
-//
-//    } else {
-//      builder = new NotificationCompat.Builder(this);
-//    }
-//
-//
-//    notification = builder.setContentTitle(remoteMessageNotification.getTitle())
-//      .setContentText(remoteMessageNotification.getBody())
-//      .setSmallIcon(R.mipmap.ic_launcher)
-//      .setAutoCancel(true)
-//      .setContentIntent(pendingIntent)
-//      .build();
-//    notificationManager.notify(0, notification);
-//
-//  }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      CharSequence name = CHANNEL_NAME;
+      String description = CHANNEL_DESCRIPTION;
+      int importance = NotificationManager.IMPORTANCE_DEFAULT;
+      NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+      channel.setDescription(description);
+      // Register the channel with the system; you can't change the importance
+      // or other notification behaviors after this
+      NotificationManager notificationManager = getSystemService(NotificationManager.class);
+      notificationManager.createNotificationChannel(channel);
+    }
+
+    Intent intent = new Intent(getApplicationContext(), ReceiveHistoryActivity.class);
+    intent.putExtra("login_username", receiver);
+    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent,
+      PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+    NotificationCompat.Builder builder =
+      new NotificationCompat.Builder(this, CHANNEL_ID).setSmallIcon(
+        Integer.parseInt(stickerId)).setLargeIcon(
+        BitmapFactory.decodeResource(getResources(), Integer.parseInt(stickerId))).setContentTitle(
+        title).setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        // Set the intent that will fire when the user taps the notification
+        .setContentIntent(pendingIntent).setAutoCancel(true);
+
+    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+    Random random = new Random();
+    // notificationId is a unique int for each notification that you must define
+    notificationManager.notify(random.nextInt(), builder.build());
+
+  }
 
 }
