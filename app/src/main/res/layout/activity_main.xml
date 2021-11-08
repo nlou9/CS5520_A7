@@ -19,18 +19,6 @@
         app:layout_constraintVertical_bias="0.244" />
 
     <Button
-        android:id="@+id/history"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="HISTORY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/receive_sticker"
-        app:layout_constraintVertical_bias="0.155" />
-
-    <Button
         android:id="@+id/send_sticker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,14 +30,15 @@
         app:layout_constraintVertical_bias="0.102" />
 
     <Button
-        android:id="@+id/receive_sticker"
+        android:id="@+id/history"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="RECEIVE STICKER"
+        android:text="HISTORY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/send_sticker"
-        app:layout_constraintVertical_bias="0.109" />
+        app:layout_constraintVertical_bias="0.155" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
