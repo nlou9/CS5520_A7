@@ -23,6 +23,8 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Random;
 
+import edu.neu.madcourse.cs5520_a7.MainActivity;
+import edu.neu.madcourse.cs5520_a7.R;
 import edu.neu.madcourse.cs5520_a7.stickerService.ReceiveHistoryActivity;
 import edu.neu.madcourse.cs5520_a7.stickerService.models.Event;
 
@@ -38,11 +40,12 @@ public class StickerFirebaseMessagingService extends FirebaseMessagingService {
   public void onCreate() {
     super.onCreate();
     mDatabase = FirebaseDatabase.getInstance().getReference();
+    System.out.println("StickerFirebaseMessagingService on create");
   }
 
   @Override
   public void onNewToken(String newToken) {
-    //super.onNewToken(newToken);
+    super.onNewToken(newToken);
 
     Log.d(TAG, "Refreshed token: " + newToken);
 
@@ -61,6 +64,7 @@ public class StickerFirebaseMessagingService extends FirebaseMessagingService {
    */
   @Override
   public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+    super.onMessageReceived(remoteMessage);
 
     Log.i(TAG, "msgId:" + remoteMessage.getMessageId());
     Log.i(TAG, "senderId:" + remoteMessage.getSenderId());
@@ -108,7 +112,7 @@ public class StickerFirebaseMessagingService extends FirebaseMessagingService {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       CharSequence name = CHANNEL_NAME;
       String description = CHANNEL_DESCRIPTION;
-      int importance = NotificationManager.IMPORTANCE_DEFAULT;
+      int importance = NotificationManager.IMPORTANCE_HIGH;
       NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
       channel.setDescription(description);
       // Register the channel with the system; you can't change the importance
@@ -119,20 +123,20 @@ public class StickerFirebaseMessagingService extends FirebaseMessagingService {
 
     Intent intent = new Intent(getApplicationContext(), ReceiveHistoryActivity.class);
     intent.putExtra("login_username", receiver);
-    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent,
       PendingIntent.FLAG_UPDATE_CURRENT);
 
 
     NotificationCompat.Builder builder =
-      new NotificationCompat.Builder(this, CHANNEL_ID).setSmallIcon(
+      new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID).setSmallIcon(
         Integer.parseInt(stickerId)).setLargeIcon(
         BitmapFactory.decodeResource(getResources(), Integer.parseInt(stickerId))).setContentTitle(
-        title).setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        title).setPriority(NotificationCompat.PRIORITY_MAX)
         // Set the intent that will fire when the user taps the notification
         .setContentIntent(pendingIntent).setAutoCancel(true);
 
-    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
     Random random = new Random();
     // notificationId is a unique int for each notification that you must define
