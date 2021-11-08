@@ -69,9 +69,9 @@ public class SendStickerActivity extends AppCompatActivity {
 
           String eventId = UUID.randomUUID().toString();
           Event event = new Event(eventId, stickerId, senderUserName, receiverUserName,
-            Instant.now().toEpochMilli(), true);
+            Instant.now().toEpochMilli(), false);
           mDatabase.child(EVENT_TABLE).child(eventId).setValue(event);
-          sendMessageToDevice(senderUserName, stickerId, receiver.fcmToken);
+          sendMessageToDevice(senderUserName, stickerId, eventId, receiver.fcmToken);
         }
 
         @Override
@@ -86,22 +86,20 @@ public class SendStickerActivity extends AppCompatActivity {
    * Pushes a notification to a given device-- in particular, this device,
    * because that's what the instanceID token is defined to be.
    */
-  private void sendMessageToDevice(String sender, String stickerId, String targetToken) {
+  private void sendMessageToDevice(
+    String sender, String stickerId, String eventId, String targetToken) {
     // Prepare data
     JSONObject jPayload = new JSONObject();
-    JSONObject jNotification = new JSONObject();
     JSONObject jdata = new JSONObject();
     try {
-      jNotification.put("title", String.format("%s sends you a new message", sender));
-      jNotification.put("body", stickerId);
 
       jdata.put("title", String.format("%s sends you a new message", sender));
-      jdata.put("content", stickerId);
+      jdata.put("stickerId", stickerId);
+      jdata.put("eventId", eventId);
 
       // If sending to a single client
       jPayload.put("to", targetToken);
       jPayload.put("priority", "high");
-      jPayload.put("notification", jNotification);
       jPayload.put("data", jdata);
 
     } catch (JSONException e) {

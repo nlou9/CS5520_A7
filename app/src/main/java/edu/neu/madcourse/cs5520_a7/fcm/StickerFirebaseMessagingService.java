@@ -7,23 +7,27 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import edu.neu.madcourse.cs5520_a7.MainActivity;
+import java.util.Map;
+
+import edu.neu.madcourse.cs5520_a7.stickerService.models.Event;
+import edu.neu.madcourse.cs5520_a7.stickerService.models.User;
 import edu.neu.madcourse.cs5520_a7.utils.Utils;
 
-//import edu.neu.madcourse.firebasedemo.MainActivity;
-//import edu.neu.madcourse.firebasedemo.R;
-//import edu.neu.madcourse.firebasedemo.utils.Utils;
-
-
-// This class simulated what happens in the backend server
-// Check meta-data in AndroidManifest, very important!!!
 public class StickerFirebaseMessagingService extends FirebaseMessagingService {
   private static final String TAG = StickerFirebaseMessagingService.class.getSimpleName();
+  private static final String EVENT_TABLE = "Events";
+  private DatabaseReference mDatabase;
   private static final String CHANNEL_ID = "STICKER_CHANNEL_ID";
   private static final String CHANNEL_NAME = "STICKER_CHANNEL_NAME";
   private static final String CHANNEL_DESCRIPTION = "STICKER_CHANNEL_DESCRIPTION";
@@ -31,6 +35,7 @@ public class StickerFirebaseMessagingService extends FirebaseMessagingService {
   @Override
   public void onCreate() {
     super.onCreate();
+    mDatabase = FirebaseDatabase.getInstance().getReference();
   }
 
   @Override
@@ -53,32 +58,42 @@ public class StickerFirebaseMessagingService extends FirebaseMessagingService {
    * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
    */
   @Override
-  public void onMessageReceived(RemoteMessage remoteMessage) {
+  public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+
+    Log.i(TAG, "msgId:" + remoteMessage.getMessageId());
+    Log.i(TAG, "senderId:" + remoteMessage.getSenderId());
+    Log.i(TAG, "messageData:" + remoteMessage.getData());
 
     myClassifier(remoteMessage);
-
-    Log.e("msgId", remoteMessage.getMessageId());
-    Log.e("senderId", remoteMessage.getSenderId());
 
   }
 
   private void myClassifier(RemoteMessage remoteMessage) {
 
-    String identificator = remoteMessage.getFrom();
-    if (identificator != null) {
-      if (identificator.contains("topic")) {
-        if (remoteMessage.getNotification() != null) {
-          RemoteMessage.Notification notification = remoteMessage.getNotification();
-//          showNotification(remoteMessage.getNotification());
-          Utils.postToastMessage(notification.getTitle(), getApplicationContext());
-        }
-      } else {
-        if (remoteMessage.getData().size() > 0) {
-          RemoteMessage.Notification notification = remoteMessage.getNotification();
-//          showNotification(notification);
-          Utils.postToastMessage(remoteMessage.getData().get("title"), getApplicationContext());
-        }
+    if (remoteMessage.getData().size() > 0) {
+      // TODO: show notification on UI
+      String stickerId = remoteMessage.getData().get("stickerId");
+      String eventId = remoteMessage.getData().get("eventId");
+      if (eventId != null) {
+        // Update the notifyStatus as true when receiving the event.
+        mDatabase.child(EVENT_TABLE).child(eventId).addValueEventListener(new ValueEventListener() {
+          @Override
+          public void onDataChange(@NonNull DataSnapshot snapshot) {
+            Event event = snapshot.getValue(Event.class);
+            if (event == null) {
+              return;
+            }
+            event.notifyStatus = true;
+            mDatabase.child(EVENT_TABLE).child(eventId).setValue(event);
+          }
+
+          @Override
+          public void onCancelled(@NonNull DatabaseError error) {
+
+          }
+        });
       }
+      Utils.postToastMessage(remoteMessage.getData().get("title"), getApplicationContext());
     }
   }
 
