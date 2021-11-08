@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +31,8 @@ import edu.neu.madcourse.cs5520_a7.utils.Utils;
 
 public class SendStickerActivity extends AppCompatActivity {
 
+  private static final String TAG = SendStickerActivity.class.getSimpleName();
+  private String serverKey = "";
   private DatabaseReference mDatabase;
   private static final String EVENT_TABLE = "Events";
   private static final String EVENT_SENDER = "sender";
@@ -39,43 +42,64 @@ public class SendStickerActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_send_sticker);
-
+    serverKey = "key=" + Utils.getProperties(getApplicationContext()).getProperty("SERVER_KEY");
     // Connects firebase
     mDatabase = FirebaseDatabase.getInstance().getReference();
+  }
+
+  // Sends sticker to another user
+  private void sendSticker(String senderUserName, String receiverUserName, String stickerId) {
+
+    mDatabase.child(USER_TABLE).child(receiverUserName).addValueEventListener(
+      new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+          User receiver = snapshot.getValue(User.class);
+          if (receiver == null) {
+            Utils.postToastMessage(String.format("Receiver %s doesn't exist", receiverUserName),
+              getApplicationContext());
+            return;
+          }
+          if (receiver.fcmToken.isEmpty()) {
+            Utils.postToastMessage(
+              String.format("Receiver %s doesn't have a registered device", receiverUserName),
+              getApplicationContext());
+            return;
+          }
+
+          String eventId = UUID.randomUUID().toString();
+          Event event = new Event(eventId, stickerId, senderUserName, receiverUserName,
+            Instant.now().toEpochMilli(), true);
+          mDatabase.child(EVENT_TABLE).child(eventId).setValue(event);
+          sendMessageToDevice(senderUserName, stickerId, receiver.fcmToken);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+          // ...
+        }
+      });
+
   }
 
   /**
    * Pushes a notification to a given device-- in particular, this device,
    * because that's what the instanceID token is defined to be.
    */
-  private void sendMessageToDevice(String targetToken) {
-    System.out.println("Target token: " + targetToken);
-    String key = "key=";
+  private void sendMessageToDevice(String sender, String stickerId, String targetToken) {
     // Prepare data
     JSONObject jPayload = new JSONObject();
     JSONObject jNotification = new JSONObject();
     JSONObject jdata = new JSONObject();
     try {
-      jNotification.put("title", "Message Title from 'SEND MESSAGE TO CLIENT BUTTON'");
-      jNotification.put("body", "Message body from 'SEND MESSAGE TO CLIENT BUTTON'");
-      jNotification.put("sound", "default");
-      jNotification.put("badge", "1");
-            /*
-            // We can add more details into the notification if we want.
-            // We happen to be ignoring them for this demo.
-            jNotification.put("click_action", "OPEN_ACTIVITY_1");
-            */
-      jdata.put("title", "data title from 'SEND MESSAGE TO CLIENT BUTTON'");
-      jdata.put("content", "data content from 'SEND MESSAGE TO CLIENT BUTTON'");
+      jNotification.put("title", String.format("%s sends you a new message", sender));
+      jNotification.put("body", stickerId);
 
-      /***
-       * The Notification object is now populated.
-       * Next, build the Payload that we send to the server.
-       */
+      jdata.put("title", String.format("%s sends you a new message", sender));
+      jdata.put("content", stickerId);
 
       // If sending to a single client
-      jPayload.put("to", targetToken); // CLIENT_REGISTRATION_TOKEN);
-
+      jPayload.put("to", targetToken);
       jPayload.put("priority", "high");
       jPayload.put("notification", jNotification);
       jPayload.put("data", jdata);
@@ -86,9 +110,12 @@ public class SendStickerActivity extends AppCompatActivity {
     Thread t = new Thread(new Runnable() {
       @Override
       public void run() {
-        final String resp = edu.neu.madcourse.cs5520_a7.utils.Utils.fcmHttpConnection(key, jPayload);
-        System.out.println("FCM response: " + resp);
-        Utils.postToastMessage("Status from Server: " + resp, getApplicationContext());
+        final String resp =
+          edu.neu.madcourse.cs5520_a7.utils.Utils.fcmHttpConnection(serverKey, jPayload);
+        Log.i(TAG, String.format("FCM Server response: %s", resp));
+        if (!resp.equals("NULL")) {
+          Utils.postToastMessage("Sticker sent successfully!", getApplicationContext());
+        }
       }
     });
     t.start();
@@ -96,17 +123,14 @@ public class SendStickerActivity extends AppCompatActivity {
 
 
   public void getHistoryOfSentStickers(String userName) {
-
-    mDatabase.child(EVENT_TABLE).orderByChild("sender").equalTo(userName).addValueEventListener(
+    mDatabase.child(EVENT_TABLE).orderByChild(EVENT_SENDER).equalTo(userName).addValueEventListener(
       new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
           List<Event> eventHistory = new ArrayList<>();
-          System.out.println(snapshot.hasChildren());
           if (snapshot.hasChildren()) {
             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
               Event event = dataSnapshot.getValue(Event.class);
-              System.out.println("Event sender is: " + event.sender);
               eventHistory.add(event);
             }
             updateStatisticsView(eventHistory);
@@ -114,7 +138,7 @@ public class SendStickerActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onCancelled(DatabaseError databaseError) {
+        public void onCancelled(@NonNull DatabaseError databaseError) {
           // ...
         }
       });
@@ -122,12 +146,10 @@ public class SendStickerActivity extends AppCompatActivity {
   }
 
   private void updateStatisticsView(List<Event> eventHistory) {
-    System.out.println("Event history size is : " + eventHistory.size());
     Map<String, Integer> countByStickerId = new HashMap<>();
     for (Event event : eventHistory) {
-      System.out.println("Event id: " + event.eventId + ", sticker id: " + event.stickerId);
       countByStickerId.put(event.stickerId, countByStickerId.getOrDefault(event.stickerId, 0) + 1);
     }
-    System.out.println("Map size is : " + countByStickerId.size());
+    // TODO: show the statistics map on UI
   }
 }
