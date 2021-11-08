@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import edu.neu.madcourse.cs5520_a7.stickerService.SendStickerActivity;
 import edu.neu.madcourse.cs5520_a7.stickerService.models.Event;
 import edu.neu.madcourse.cs5520_a7.stickerService.models.User;
 import edu.neu.madcourse.cs5520_a7.user.LoginActivity;
@@ -268,6 +269,10 @@ public class MainActivity extends AppCompatActivity {
   }
   public void goToLogin(View view) {
     Intent intent = new Intent(this, LoginActivity.class);
+    startActivity(intent);
+  }
+  public void goToSendSticker(View view) {
+    Intent intent = new Intent(this, SendStickerActivity.class);
     startActivity(intent);
   }
 }
