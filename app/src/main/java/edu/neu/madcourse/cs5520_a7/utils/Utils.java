@@ -21,15 +21,6 @@ import java.util.Properties;
 
 public class Utils {
 
-    public static class MyException extends Exception {
-        public MyException() {
-        }
-
-        public MyException(String message) {
-            super(message);
-        }
-    }
-
     public static String date() {
         Date dNow = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
@@ -77,10 +68,6 @@ public class Utils {
         });
     }
 
-    /* Dive deep into https://medium.com/@selvaganesh93/firebase-cloud-messaging-important-rest-apis-be79260022b5
-     * Manage five ways to interact with the FCM server
-     * Use tools such like POSTMAN to analysis response
-     */
     public static String fcmHttpConnection(String serverToken, JSONObject jsonObject) {
         try {
 
@@ -93,7 +80,6 @@ public class Utils {
             conn.setUseCaches(false);
             conn.setDoInput(true);
             conn.setDoOutput(true);
-            System.out.println("Json string: " + jsonObject.toString());
 
             // Send FCM message content.
             OutputStream outputStream = conn.getOutputStream();
@@ -105,12 +91,8 @@ public class Utils {
             InputStream inputStream = conn.getInputStream();
             return convertStreamToString(inputStream);
         } catch (IOException e) {
-            System.out.println("Exception: " + e);
-            System.out.println("Exception message:" + e.getMessage());
             return "NULL";
         }
 
     }
-
-
 }

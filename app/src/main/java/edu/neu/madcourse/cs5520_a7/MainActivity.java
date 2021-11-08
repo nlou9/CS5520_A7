@@ -101,10 +101,13 @@ public class MainActivity extends AppCompatActivity {
           String token = task.getResult();
           System.out.println("Fetched token is: " + token);
           User user = new User("test1", token);
-          mDatabase.child("Users").child(user.username).setValue(user);
-          sendSticker("test2", "test1", "1");
-
-
+          Task<Void> loginTask = mDatabase.child(USER_TABLE).child(user.username).setValue(user);
+          loginTask.addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+              Log.i("A", String.format("Login user %s, success: %s ", user.username, loginTask.isSuccessful()));
+            }
+          });
         }
       });
 
