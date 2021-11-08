@@ -6,7 +6,7 @@
 |Na Lou|**nlou9**|
 |Yahan Zhao|**zyahan** or **yahanzhao94**|
 |Qianwen Zhang||
-|Yulei Sun|**sun.yule** (user name of local git commit) or **angelsophia1** (name of github account)|
+|Yulei Sun|**hamstersophia** or **angelsophia1**|
 
 Copy the server key from: https://console.firebase.google.com/project/cs5520a7-301d3/settings/cloudmessaging/android:edu.neu.madcourse.cs5520_a7 into app/src/main/assets/firebase.properties
 
