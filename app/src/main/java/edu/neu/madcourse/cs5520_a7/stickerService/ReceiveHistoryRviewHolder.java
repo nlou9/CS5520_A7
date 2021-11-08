@@ -7,13 +7,13 @@ import android.widget.TextView;
 import edu.neu.madcourse.cs5520_a7.R;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RviewHolder extends RecyclerView.ViewHolder {
+public class ReceiveHistoryRviewHolder extends RecyclerView.ViewHolder {
     public ImageView stickerIcon;
     public TextView sender;
     public TextView time;
     public TextView status;
 
-    public RviewHolder(View itemView, final ItemClickListener listener) {
+    public ReceiveHistoryRviewHolder(View itemView, final ItemClickListener listener) {
         super(itemView);
         stickerIcon = itemView.findViewById(R.id.item_icon);
         sender = itemView.findViewById(R.id.event_sender);

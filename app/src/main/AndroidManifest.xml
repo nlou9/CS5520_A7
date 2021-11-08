@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS5520_A7">
         <activity
-            android:name=".stickerService.HistoryActivity"
+            android:name=".stickerService.ReceiveHistoryActivity"
             android:exported="true" />
         <activity
             android:name=".user.UserActivity"

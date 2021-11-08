@@ -12,13 +12,13 @@ import java.util.List;
 import edu.neu.madcourse.cs5520_a7.R;
 import edu.neu.madcourse.cs5520_a7.stickerService.models.Event;
 
-public class RviewAdapter extends RecyclerView.Adapter<RviewHolder> {
+public class ReceiveHistoryRviewAdapter extends RecyclerView.Adapter<ReceiveHistoryRviewHolder> {
 
     private final List<Event> events;
     private ItemClickListener listener;
 
     //Constructor
-    public RviewAdapter(List<Event> itemList) {
+    public ReceiveHistoryRviewAdapter(List<Event> itemList) {
         this.events = itemList;
     }
 
@@ -27,13 +27,13 @@ public class RviewAdapter extends RecyclerView.Adapter<RviewHolder> {
     }
 
     @Override
-    public RviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ReceiveHistoryRviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card, parent, false);
-        return new RviewHolder(view, listener);
+        return new ReceiveHistoryRviewHolder(view, listener);
     }
 
     @Override
-    public void onBindViewHolder(RviewHolder holder, int position) {
+    public void onBindViewHolder(ReceiveHistoryRviewHolder holder, int position) {
         Event currentItem = events.get(position);
 
         holder.stickerIcon.setImageResource(Integer.parseInt(currentItem.stickerId));

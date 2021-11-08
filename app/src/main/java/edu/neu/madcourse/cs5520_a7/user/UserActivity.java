@@ -1,28 +1,18 @@
 package edu.neu.madcourse.cs5520_a7.user;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 import android.view.View;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import edu.neu.madcourse.cs5520_a7.R;
-import edu.neu.madcourse.cs5520_a7.stickerService.HistoryActivity;
+import edu.neu.madcourse.cs5520_a7.stickerService.ReceiveHistoryActivity;
 import edu.neu.madcourse.cs5520_a7.stickerService.SendHistoryActivity;
 import edu.neu.madcourse.cs5520_a7.stickerService.SendStickerActivity;
-import edu.neu.madcourse.cs5520_a7.stickerService.models.User;
 
 public class UserActivity extends AppCompatActivity {
 
@@ -52,7 +42,7 @@ public class UserActivity extends AppCompatActivity {
   }
 
   public void goToHistory(View view) {
-    Intent intent = new Intent(getBaseContext(), HistoryActivity.class);
+    Intent intent = new Intent(getBaseContext(), ReceiveHistoryActivity.class);
     intent.putExtra("login_username", loginUsername);
     startActivity(intent);
   }

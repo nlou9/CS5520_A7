@@ -19,7 +19,7 @@ import java.util.List;
 import edu.neu.madcourse.cs5520_a7.R;
 import edu.neu.madcourse.cs5520_a7.stickerService.models.Event;
 
-public class HistoryActivity extends AppCompatActivity {
+public class ReceiveHistoryActivity extends AppCompatActivity {
 
   private static final String EVENT_TABLE = "Events";
   private static final String EVENT_RECEIVER = "receiver";
@@ -29,7 +29,7 @@ public class HistoryActivity extends AppCompatActivity {
   private List<Event> historyEvents = new ArrayList<>();
 
   private RecyclerView recyclerView;
-  private RviewAdapter rviewAdapter;
+  private ReceiveHistoryRviewAdapter rviewAdapter;
   private RecyclerView.LayoutManager rLayoutManger;
 
   @Override
@@ -51,7 +51,7 @@ public class HistoryActivity extends AppCompatActivity {
     recyclerView = findViewById(R.id.receive_history_recycler_view);
     recyclerView.setHasFixedSize(true);
 
-    rviewAdapter = new RviewAdapter(historyEvents);
+    rviewAdapter = new ReceiveHistoryRviewAdapter(historyEvents);
     ItemClickListener itemClickListener = new ItemClickListener() {
       @Override
       public void onItemClick(int position) {
