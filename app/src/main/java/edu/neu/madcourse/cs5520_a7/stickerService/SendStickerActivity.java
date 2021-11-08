@@ -67,28 +67,28 @@ public class SendStickerActivity extends AppCompatActivity {
     ivHeart.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        stickerId = String.valueOf(R.id.heart);
+        stickerId = String.valueOf(R.drawable.heart);
         Log.d("logInfo=:",stickerId);
       }
     });
     ivLove.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        stickerId = String.valueOf(R.id.love);
+        stickerId = String.valueOf(R.drawable.love);
         Log.d("logInfo=:",stickerId);
       }
     });
     ivTeamWork.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        stickerId = String.valueOf(R.id.team_work);
+        stickerId = String.valueOf(R.drawable.team_work);
         Log.d("logInfo=:",stickerId);
       }
     });
     ivHappyNewYear.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        stickerId = String.valueOf(R.id.happy_new_year);
+        stickerId = String.valueOf(R.drawable.happy_new_year);
         Log.d("logInfo=:",stickerId);
       }
     });
