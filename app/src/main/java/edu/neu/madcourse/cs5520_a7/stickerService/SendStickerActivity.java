@@ -32,6 +32,7 @@ import edu.neu.madcourse.cs5520_a7.utils.Utils;
 public class SendStickerActivity extends AppCompatActivity {
 
   private static final String TAG = SendStickerActivity.class.getSimpleName();
+  private String serverKey = "";
   private DatabaseReference mDatabase;
   private static final String EVENT_TABLE = "Events";
   private static final String EVENT_SENDER = "sender";
@@ -41,9 +42,44 @@ public class SendStickerActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_send_sticker);
-
+    serverKey = "key=" + Utils.getProperties(getApplicationContext()).getProperty("SERVER_KEY");
     // Connects firebase
     mDatabase = FirebaseDatabase.getInstance().getReference();
+  }
+
+  // Sends sticker to another user
+  private void sendSticker(String senderUserName, String receiverUserName, String stickerId) {
+
+    mDatabase.child(USER_TABLE).child(receiverUserName).addValueEventListener(
+      new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+          User receiver = snapshot.getValue(User.class);
+          if (receiver == null) {
+            Utils.postToastMessage(String.format("Receiver %s doesn't exist", receiverUserName),
+              getApplicationContext());
+            return;
+          }
+          if (receiver.fcmToken.isEmpty()) {
+            Utils.postToastMessage(
+              String.format("Receiver %s doesn't have a registered device", receiverUserName),
+              getApplicationContext());
+            return;
+          }
+
+          String eventId = UUID.randomUUID().toString();
+          Event event = new Event(eventId, stickerId, senderUserName, receiverUserName,
+            Instant.now().toEpochMilli(), true);
+          mDatabase.child(EVENT_TABLE).child(eventId).setValue(event);
+          sendMessageToDevice(senderUserName, stickerId, receiver.fcmToken);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+          // ...
+        }
+      });
+
   }
 
   /**
@@ -51,7 +87,6 @@ public class SendStickerActivity extends AppCompatActivity {
    * because that's what the instanceID token is defined to be.
    */
   private void sendMessageToDevice(String sender, String stickerId, String targetToken) {
-    String key = "key=";
     // Prepare data
     JSONObject jPayload = new JSONObject();
     JSONObject jNotification = new JSONObject();
@@ -60,9 +95,9 @@ public class SendStickerActivity extends AppCompatActivity {
       jNotification.put("title", String.format("%s sends you a new message", sender));
       jNotification.put("body", stickerId);
 
-      jdata.put("title",  String.format("%s sends you a new message", sender));
+      jdata.put("title", String.format("%s sends you a new message", sender));
       jdata.put("content", stickerId);
-      
+
       // If sending to a single client
       jPayload.put("to", targetToken);
       jPayload.put("priority", "high");
@@ -75,9 +110,12 @@ public class SendStickerActivity extends AppCompatActivity {
     Thread t = new Thread(new Runnable() {
       @Override
       public void run() {
-        final String resp = edu.neu.madcourse.cs5520_a7.utils.Utils.fcmHttpConnection(key, jPayload);
+        final String resp =
+          edu.neu.madcourse.cs5520_a7.utils.Utils.fcmHttpConnection(serverKey, jPayload);
         Log.i(TAG, String.format("FCM Server response: %s", resp));
-        Utils.postToastMessage("Status from Server: " + resp, getApplicationContext());
+        if (!resp.equals("NULL")) {
+          Utils.postToastMessage("Sticker sent successfully!", getApplicationContext());
+        }
       }
     });
     t.start();
@@ -90,7 +128,6 @@ public class SendStickerActivity extends AppCompatActivity {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
           List<Event> eventHistory = new ArrayList<>();
-          System.out.println(snapshot.hasChildren());
           if (snapshot.hasChildren()) {
             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
               Event event = dataSnapshot.getValue(Event.class);
