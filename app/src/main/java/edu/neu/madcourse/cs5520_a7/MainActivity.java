@@ -21,6 +21,9 @@ import com.google.firebase.database.ValueEventListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -42,8 +45,10 @@ import edu.neu.madcourse.cs5520_a7.stickerService.models.Event;
 import edu.neu.madcourse.cs5520_a7.stickerService.models.User;
 import edu.neu.madcourse.cs5520_a7.utils.Utils;
 
-public class MainActivity extends AppCompatActivity {
+import edu.neu.madcourse.cs5520_a7.stickerService.models.User;
+import edu.neu.madcourse.cs5520_a7.user.DAOUser;
 
+public class MainActivity extends AppCompatActivity {
   private static final String EVENT_TABLE = "Events";
   private static final String EVENT_RECEIVER = "receiver";
   private static final String USER_TABLE = "Users";
@@ -57,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     // Connect with firebase
     //
     mDatabase = FirebaseDatabase.getInstance().getReference();
-
+    mDatabase.child("Users").setValue(true);
 
     Event event =
       new Event("1", UUID.randomUUID().toString(), "test1", "test2", Instant.now().toEpochMilli(),
