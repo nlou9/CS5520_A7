@@ -16,7 +16,7 @@
             android:name=".user.LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".stickerService.ReceiveStickerActivity"
+            android:name=".stickerService.HistoryActivity"
             android:exported="true" />
         <activity
             android:name=".stickerService.SendStickerActivity"

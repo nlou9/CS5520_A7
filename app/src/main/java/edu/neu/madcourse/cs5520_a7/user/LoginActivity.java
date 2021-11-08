@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -76,5 +78,9 @@ public class LoginActivity extends AppCompatActivity {
   // TODO: may show some message that the user login successfully.
   private void onLoginSuccess() {
 
+  }
+
+  public void loginAndGoBackToMain(View view) {
+    this.finish();
   }
 }
