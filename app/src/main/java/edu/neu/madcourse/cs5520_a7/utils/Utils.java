@@ -19,13 +19,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+// Copied from example
 public class Utils {
-
-    public static String date() {
-        Date dNow = new Date();
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
-        return ft.format(dNow);
-    }
 
     public static String convertStreamToString(InputStream inputStream) {
         StringBuilder stringBuilder = new StringBuilder();

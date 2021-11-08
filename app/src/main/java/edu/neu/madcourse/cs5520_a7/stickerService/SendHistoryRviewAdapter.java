@@ -20,14 +20,16 @@ public class SendHistoryRviewAdapter extends RecyclerView.Adapter<SendHistoryRvi
   public SendHistoryRviewAdapter(Map<String, Integer> countByStickerId) {
     stickerIdWithCount = new ArrayList<>();
     for (String stickerId : countByStickerId.keySet()) {
-      stickerIdWithCount.add(new int[] {Integer.parseInt(stickerId), countByStickerId.get(stickerId)});
+      stickerIdWithCount.add(
+        new int[]{Integer.parseInt(stickerId), countByStickerId.get(stickerId)});
     }
   }
 
 
   @Override
   public SendHistoryRviewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.send_history_card, parent, false);
+    View view =
+      LayoutInflater.from(parent.getContext()).inflate(R.layout.send_history_card, parent, false);
     return new SendHistoryRviewHolder(view);
   }
 
