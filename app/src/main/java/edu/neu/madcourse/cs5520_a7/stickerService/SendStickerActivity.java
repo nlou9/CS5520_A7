@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +41,11 @@ public class SendStickerActivity extends AppCompatActivity {
   private static final String EVENT_TABLE = "Events";
   private static final String EVENT_SENDER = "sender";
   private static final String USER_TABLE = "Users";
+  private String stickerId;
+  private String senderUserName;
+  private String receiverUserName;
+  private EditText et_receiver;
+  private Button btn_send;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +54,53 @@ public class SendStickerActivity extends AppCompatActivity {
     serverKey = "key=" + Utils.getProperties(getApplicationContext()).getProperty("SERVER_KEY");
     // Connects firebase
     mDatabase = FirebaseDatabase.getInstance().getReference();
+
+    senderUserName = getIntent().getStringExtra("login_username");
+    et_receiver = findViewById(R.id.receiver);
+    btn_send = findViewById(R.id.send);
+
+    //image
+    ImageView ivHeart = (ImageView) findViewById(R.id.heart);
+    ImageView ivLove = (ImageView) findViewById(R.id.love);
+    ImageView ivTeamWork = (ImageView) findViewById(R.id.team_work);
+    ImageView ivHappyNewYear = (ImageView) findViewById(R.id.happy_new_year);
+    ivHeart.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        stickerId = String.valueOf(R.id.heart);
+        Log.d("logInfo=:",stickerId);
+      }
+    });
+    ivLove.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        stickerId = String.valueOf(R.id.love);
+        Log.d("logInfo=:",stickerId);
+      }
+    });
+    ivTeamWork.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        stickerId = String.valueOf(R.id.team_work);
+        Log.d("logInfo=:",stickerId);
+      }
+    });
+    ivHappyNewYear.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        stickerId = String.valueOf(R.id.happy_new_year);
+        Log.d("logInfo=:",stickerId);
+      }
+    });
+    btn_send.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        receiverUserName = et_receiver.getText().toString();
+        Log.d("logInfo=:",receiverUserName);
+        sendSticker(senderUserName, receiverUserName, stickerId);
+      }
+    });
+
   }
 
   // Sends sticker to another user
