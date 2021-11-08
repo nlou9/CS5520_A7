@@ -111,8 +111,18 @@ public class SendStickerActivity extends AppCompatActivity {
         final String resp =
           edu.neu.madcourse.cs5520_a7.utils.Utils.fcmHttpConnection(serverKey, jPayload);
         Log.i(TAG, String.format("FCM Server response: %s", resp));
-        if (!resp.equals("NULL")) {
-          Utils.postToastMessage("Sticker sent successfully!", getApplicationContext());
+        try {
+          JSONObject responseJson = new JSONObject(resp);
+          if (responseJson.has("success") && responseJson.getInt("success") == 1) {
+            Utils.postToastMessage("Sticker sent successfully!", getApplicationContext());
+          } else {
+            Utils.postToastMessage("Sticker sent failed! " +
+                responseJson.getJSONArray("results").getJSONObject(0).get("error"),
+              getApplicationContext());
+          }
+        } catch (JSONException e) {
+          Log.e(TAG, "error: " + e.toString());
+          Utils.postToastMessage("Sticker sent failed!", getApplicationContext());
         }
       }
     });
