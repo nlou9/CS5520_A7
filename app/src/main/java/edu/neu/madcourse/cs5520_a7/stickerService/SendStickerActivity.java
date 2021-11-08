@@ -3,6 +3,7 @@ package edu.neu.madcourse.cs5520_a7.stickerService;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -46,6 +47,7 @@ public class SendStickerActivity extends AppCompatActivity {
   private String receiverUserName;
   private EditText et_receiver;
   private Button btn_send;
+  private ImageView selectedImage;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,9 @@ public class SendStickerActivity extends AppCompatActivity {
       @Override
       public void onClick(View view) {
         stickerId = String.valueOf(R.drawable.heart);
+        ivHeart.getDrawable().setColorFilter(0x77000000,PorterDuff.Mode.SRC_ATOP);
+
+        selectedImage = ivHeart;
         Log.d("logInfo=:",stickerId);
       }
     });
@@ -75,6 +80,8 @@ public class SendStickerActivity extends AppCompatActivity {
       @Override
       public void onClick(View view) {
         stickerId = String.valueOf(R.drawable.love);
+        ivLove.getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+        selectedImage = ivLove;
         Log.d("logInfo=:",stickerId);
       }
     });
@@ -82,6 +89,8 @@ public class SendStickerActivity extends AppCompatActivity {
       @Override
       public void onClick(View view) {
         stickerId = String.valueOf(R.drawable.team_work);
+        ivTeamWork.getDrawable().setColorFilter(0x77000000,PorterDuff.Mode.SRC_ATOP);
+        selectedImage = ivTeamWork;
         Log.d("logInfo=:",stickerId);
       }
     });
@@ -89,6 +98,8 @@ public class SendStickerActivity extends AppCompatActivity {
       @Override
       public void onClick(View view) {
         stickerId = String.valueOf(R.drawable.happy_new_year);
+        ivHappyNewYear.getDrawable().setColorFilter(0x77000000,PorterDuff.Mode.SRC_ATOP);
+        selectedImage = ivHappyNewYear;
         Log.d("logInfo=:",stickerId);
       }
     });
@@ -96,6 +107,7 @@ public class SendStickerActivity extends AppCompatActivity {
       @Override
       public void onClick(View view) {
         receiverUserName = et_receiver.getText().toString();
+        selectedImage.getDrawable().clearColorFilter();
         Log.d("logInfo=:",receiverUserName);
         sendSticker(senderUserName, receiverUserName, stickerId);
       }
