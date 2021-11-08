@@ -5,15 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,8 +13,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +48,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     rLayoutManger = new LinearLayoutManager(this);
 
-    recyclerView = findViewById(R.id.recycler_view);
+    recyclerView = findViewById(R.id.receive_history_recycler_view);
     recyclerView.setHasFixedSize(true);
 
     rviewAdapter = new RviewAdapter(historyEvents);

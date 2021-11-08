@@ -20,6 +20,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import edu.neu.madcourse.cs5520_a7.R;
 import edu.neu.madcourse.cs5520_a7.stickerService.HistoryActivity;
+import edu.neu.madcourse.cs5520_a7.stickerService.SendHistoryActivity;
 import edu.neu.madcourse.cs5520_a7.stickerService.SendStickerActivity;
 import edu.neu.madcourse.cs5520_a7.stickerService.models.User;
 
@@ -40,6 +41,12 @@ public class UserActivity extends AppCompatActivity {
 
   public void goToSendSticker(View view) {
     Intent intent = new Intent(getBaseContext(), SendStickerActivity.class);
+    intent.putExtra("login_username", loginUsername);
+    startActivity(intent);
+  }
+
+  public void goToSendHistory(View view) {
+    Intent intent = new Intent(getBaseContext(), SendHistoryActivity.class);
     intent.putExtra("login_username", loginUsername);
     startActivity(intent);
   }

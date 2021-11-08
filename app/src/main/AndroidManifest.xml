@@ -16,6 +16,9 @@
             android:name=".user.UserActivity"
             android:exported="true" />
         <activity
+            android:name=".stickerService.SendHistoryActivity"
+            android:exported="true" />
+        <activity
             android:name=".stickerService.SendStickerActivity"
             android:exported="true" />
         <activity
