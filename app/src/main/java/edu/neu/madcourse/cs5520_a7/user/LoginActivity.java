@@ -46,13 +46,6 @@ public class LoginActivity extends AppCompatActivity {
           Log.i(TAG, "Fetched token is: " + deviceFcmToken);
         }
       });
-
-    EditText etName = findViewById(R.id.et);
-    Button btnRegister = findViewById(R.id.btnRegister);
-    btnRegister.setOnClickListener(view -> {
-      login(etName.getText().toString());
-    });
-
   }
 
   private void register(String username) {
