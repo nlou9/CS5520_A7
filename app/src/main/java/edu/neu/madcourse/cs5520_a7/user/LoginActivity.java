@@ -52,9 +52,9 @@ public class LoginActivity extends AppCompatActivity {
     btnRegister.setOnClickListener(view -> {
       User user = new User(etName.getText().toString());
       dao.add(user).addOnSuccessListener(success -> {
-        Toast.makeText(this, "Register successfully!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, "Register successfully!", Toast.LENGTH_SHORT).show();
       }).addOnFailureListener(error -> {
-        Toast.makeText(this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
       });
     });
 

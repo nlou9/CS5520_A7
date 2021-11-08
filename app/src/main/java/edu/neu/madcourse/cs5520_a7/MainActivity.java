@@ -18,9 +18,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -43,6 +45,7 @@ import java.util.UUID;
 
 import edu.neu.madcourse.cs5520_a7.stickerService.models.Event;
 import edu.neu.madcourse.cs5520_a7.stickerService.models.User;
+import edu.neu.madcourse.cs5520_a7.user.LoginActivity;
 import edu.neu.madcourse.cs5520_a7.utils.Utils;
 
 import edu.neu.madcourse.cs5520_a7.stickerService.models.User;
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    Button btnLogin = findViewById(R.id.login_main);
 
     // Connect with firebase
     //
@@ -116,6 +121,13 @@ public class MainActivity extends AppCompatActivity {
         }
       });
 
+    btnLogin.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+      }
+    });
 
 
   }
