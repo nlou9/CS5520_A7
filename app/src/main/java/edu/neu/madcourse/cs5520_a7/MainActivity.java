@@ -18,9 +18,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -40,6 +42,7 @@ import java.util.UUID;
 
 import edu.neu.madcourse.cs5520_a7.stickerService.models.Event;
 import edu.neu.madcourse.cs5520_a7.stickerService.models.User;
+import edu.neu.madcourse.cs5520_a7.user.LoginActivity;
 import edu.neu.madcourse.cs5520_a7.utils.Utils;
 
 public class MainActivity extends AppCompatActivity {
@@ -114,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
 
 
   }
-
   public List<Event> getHistoryOfReceivedStickers(String userName) {
     List<Event> eventHistory = new ArrayList<>();
     mDatabase.child(EVENT_TABLE).orderByChild(EVENT_RECEIVER).equalTo(
@@ -263,5 +265,9 @@ public class MainActivity extends AppCompatActivity {
       }
     });
     t.start();
+  }
+  public void goToLogin(View view) {
+    Intent intent = new Intent(this, LoginActivity.class);
+    startActivity(intent);
   }
 }
