@@ -49,15 +49,8 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText etName = findViewById(R.id.et);
     Button btnRegister = findViewById(R.id.btnRegister);
-    DAOUser dao = new DAOUser();
-
     btnRegister.setOnClickListener(view -> {
-      User user = new User(etName.getText().toString());
-      dao.add(user).addOnSuccessListener(success -> {
-        Toast.makeText(LoginActivity.this, "Register successfully!", Toast.LENGTH_SHORT).show();
-      }).addOnFailureListener(error -> {
-        Toast.makeText(LoginActivity.this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
-      });
+      login(etName.getText().toString());
     });
 
   }
@@ -75,9 +68,8 @@ public class LoginActivity extends AppCompatActivity {
     });
   }
 
-  // TODO: may show some message that the user login successfully.
   private void onLoginSuccess() {
-
+    Toast.makeText(LoginActivity.this, "Login successfully!", Toast.LENGTH_SHORT).show();
   }
 
   public void loginAndGoBackToMain(View view) {
