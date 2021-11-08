@@ -1,4 +1,4 @@
-package edu.neu.madcourse.numad21fa_yahanzhao;
+package edu.neu.madcourse.cs5520_a7.stickerService;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,16 +6,20 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.time.Instant;
+import java.util.List;
+
+import edu.neu.madcourse.cs5520_a7.R;
+import edu.neu.madcourse.cs5520_a7.stickerService.models.Event;
 
 public class RviewAdapter extends RecyclerView.Adapter<RviewHolder> {
 
-    private final ArrayList<ItemCard> itemList;
+    private final List<Event> events;
     private ItemClickListener listener;
 
     //Constructor
-    public RviewAdapter(ArrayList<ItemCard> itemList) {
-        this.itemList = itemList;
+    public RviewAdapter(List<Event> itemList) {
+        this.events = itemList;
     }
 
     public void setOnItemClickListener(ItemClickListener listener) {
@@ -30,14 +34,18 @@ public class RviewAdapter extends RecyclerView.Adapter<RviewHolder> {
 
     @Override
     public void onBindViewHolder(RviewHolder holder, int position) {
-        ItemCard currentItem = itemList.get(position);
+        Event currentItem = events.get(position);
 
-        holder.itemName.setText(currentItem.getItemName());
-        holder.itemUrl.setText(currentItem.getItemURL());
+        holder.stickerIcon.setImageResource(Integer.parseInt(currentItem.stickerId));
+        holder.sender.setText(currentItem.sender);
+        holder.time.setText(Instant.ofEpochMilli(currentItem.timestampInMillis).toString());
+        if (!currentItem.notifyStatus) {
+            holder.status.setText("Unread");
+        }
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return events.size();
     }
 }

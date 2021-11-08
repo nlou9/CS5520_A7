@@ -1,20 +1,24 @@
-package edu.neu.madcourse.numad21fa_yahanzhao;
+package edu.neu.madcourse.cs5520_a7.stickerService;
 
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import edu.neu.madcourse.cs5520_a7.R;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RviewHolder extends RecyclerView.ViewHolder {
-    public TextView itemName;
-    public TextView itemUrl;
+    public ImageView stickerIcon;
+    public TextView sender;
+    public TextView time;
+    public TextView status;
 
     public RviewHolder(View itemView, final ItemClickListener listener) {
         super(itemView);
-        itemName = itemView.findViewById(R.id.item_name);
-        itemUrl = itemView.findViewById(R.id.item_url);
+        stickerIcon = itemView.findViewById(R.id.item_icon);
+        sender = itemView.findViewById(R.id.event_sender);
+        time = itemView.findViewById(R.id.event_time);
+        status = itemView.findViewById(R.id.status);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -22,7 +26,6 @@ public class RviewHolder extends RecyclerView.ViewHolder {
                 if (listener != null) {
                     int position = getLayoutPosition();
                     if (position != RecyclerView.NO_POSITION) {
-
                         listener.onItemClick(position);
                     }
                 }
