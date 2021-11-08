@@ -13,8 +13,14 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
+
+import edu.neu.madcourse.cs5520_a7.stickerService.models.User;
+import edu.neu.madcourse.cs5520_a7.user.DAOUser;
 
 public class MainActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
@@ -27,5 +33,18 @@ public class MainActivity extends AppCompatActivity {
         //
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("Users").setValue(true);
+
+        EditText etName = findViewById(R.id.et);
+        Button btnRegister = findViewById(R.id.btnRegister);
+        DAOUser dao = new DAOUser();
+
+        btnRegister.setOnClickListener(view -> {
+            User user = new User(etName.getText().toString());
+            dao.add(user).addOnSuccessListener(success -> {
+                Toast.makeText(this, "Register successfully!", Toast.LENGTH_SHORT).show();
+            }).addOnFailureListener(error -> {
+                Toast.makeText(this, "" + error.getMessage(), Toast.LENGTH_SHORT).show();
+            });
+        });
     }
 }

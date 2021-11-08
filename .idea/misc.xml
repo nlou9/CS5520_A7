@@ -3,12 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Users/97376/OneDrive/Documents/GitHub/CS5520_A7/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/Users/97376/OneDrive/Documents/GitHub/CS5520_A7/app/src/main/res/layout/activity_main.xml" value="0.2857142857142857" />
+        <entry key="..\:/Users/97376/OneDrive/Documents/GitHub/CS5520_A7/app/src/main/res/layout/activity_receive_sticker.xml" value="0.21458333333333332" />
+        <entry key="..\:/Users/97376/OneDrive/Documents/GitHub/CS5520_A7/app/src/main/res/layout/activity_send_sticker.xml" value="0.21458333333333332" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.11322463768115942" />
-        <entry key="app/src/main/res/layout/activity_receive_sticker.xml" value="0.1716485507246377" />
-        <entry key="app/src/main/res/layout/activity_send_notification.xml" value="0.16927083333333334" />
-        <entry key="app/src/main/res/layout/activity_send_sticker.xml" value="0.15520833333333334" />
-        <entry key="app/src/main/res/layout/activity_sticker.xml" value="0.121875" />
       </map>
     </option>
   </component>
