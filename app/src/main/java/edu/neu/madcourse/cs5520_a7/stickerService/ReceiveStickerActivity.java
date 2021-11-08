@@ -12,7 +12,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import edu.neu.madcourse.cs5520_a7.R;
@@ -34,18 +33,16 @@ public class ReceiveStickerActivity extends AppCompatActivity {
     mDatabase = FirebaseDatabase.getInstance().getReference();
   }
 
-  public void getHistoryOfReceivedStickers(String userName) {
+  private void getHistoryOfReceivedStickers(String userName) {
 
     mDatabase.child(EVENT_TABLE).orderByChild(EVENT_RECEIVER).equalTo(
       userName).addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
-        System.out.println(snapshot.hasChildren());
         List<Event> eventHistory = new ArrayList<>();
         if (snapshot.hasChildren()) {
           for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
             Event event = dataSnapshot.getValue(Event.class);
-            System.out.println("Event receiver is: " + event.receiver);
             eventHistory.add(event);
           }
         }
@@ -53,14 +50,16 @@ public class ReceiveStickerActivity extends AppCompatActivity {
       }
 
       @Override
-      public void onCancelled(DatabaseError databaseError) {
+      public void onCancelled(@NonNull DatabaseError databaseError) {
         // ...
       }
     });
   }
 
   private void updateHistoryView(List<Event> events) {
+    // Sort the event by timestamp desc.
     events.sort((o1, o2) -> Long.compare(o2.timestampInMillis, o1.timestampInMillis));
+    // TODO: show the list on the UI
 
   }
 }
